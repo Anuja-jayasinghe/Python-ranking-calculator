@@ -1,24 +1,42 @@
 def get_standard_competition_ranks(marks):
-    # Step 1: Sort marks in descending order with original index
     sorted_marks = sorted(enumerate(marks), key=lambda x: -x[1])
-    
-    ranks = [0] * len(marks)  # To hold the final ranks
+    ranks = [0] * len(marks)
     current_rank = 1
-
     for i, (original_index, mark) in enumerate(sorted_marks):
         if i == 0 or mark != sorted_marks[i - 1][1]:
             current_rank = i + 1
         ranks[original_index] = current_rank
-
     return ranks
 
+def parse_pasted_marks(raw_input):
+    # Split by common separators and remove empty lines
+    lines = raw_input.replace(',', '\n').splitlines()
+    marks = []
+    for line in lines:
+        line = line.strip()
+        if line:  # not empty
+            try:
+                marks.append(float(line))
+            except ValueError:
+                print(f"⚠️ Skipped invalid entry: '{line}'")
+    return marks
+
 def main():
-    # Step 2: CLI input
-    user_input = input("Enter marks separated by commas (e.g., 83.3, 96.6, 87.5, 87.5, 85.0):\n")
-    try:
-        marks = [float(x.strip()) for x in user_input.split(',')]
-    except ValueError:
-        print("Invalid input! Please enter only numbers separated by commas.")
+    print("📋 Paste your marks below (one per line or comma-separated). Press Enter twice to finish:\n")
+
+    # Read multi-line paste input
+    lines = []
+    while True:
+        line = input()
+        if line == "":
+            break
+        lines.append(line)
+    raw_input = "\n".join(lines)
+
+    marks = parse_pasted_marks(raw_input)
+
+    if not marks:
+        print("❌ No valid marks found.")
         return
 
     ranks = get_standard_competition_ranks(marks)
@@ -30,5 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
