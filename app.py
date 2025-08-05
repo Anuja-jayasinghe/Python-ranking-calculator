@@ -9,12 +9,11 @@ def get_standard_competition_ranks(marks):
     return ranks
 
 def parse_pasted_marks(raw_input):
-    # Split by common separators and remove empty lines
     lines = raw_input.replace(',', '\n').splitlines()
     marks = []
     for line in lines:
         line = line.strip()
-        if line:  # not empty
+        if line:
             try:
                 marks.append(float(line))
             except ValueError:
@@ -24,7 +23,6 @@ def parse_pasted_marks(raw_input):
 def main():
     print("📋 Paste your marks below (one per line or comma-separated). Press Enter twice to finish:\n")
 
-    # Read multi-line paste input
     lines = []
     while True:
         line = input()
@@ -45,6 +43,13 @@ def main():
     print("------------")
     for mark, rank in zip(marks, ranks):
         print(f"{mark}\t{rank}")
+
+    # Ask if user wants only ranks
+    choice = input("\n🔄 Do you want to copy only the ranks for pasting back into Excel? (y/n): ").strip().lower()
+    if choice == 'y':
+        print("\n📋 Copy the ranks below and paste into Excel:\n")
+        for rank in ranks:
+            print(rank)
 
 if __name__ == "__main__":
     main()
